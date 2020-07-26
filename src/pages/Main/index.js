@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FaGithub } from 'react-icons/fa';
-import { Container, SignInForm, SubmitButton } from './styles';
+import { Container, Header, SignInForm, SignUpForm, SubmitButton } from './styles';
 import api from '../../services/api';
 
 export default class Main extends Component {
@@ -12,6 +12,13 @@ export default class Main extends Component {
                 password: '',
             },
             user: [],
+            signUp: {
+               name: '' ,
+               githubId: '',
+               email: '',
+               password: '',
+               confirmPassword: '',
+            }
         };
     }
 
@@ -38,7 +45,6 @@ export default class Main extends Component {
             password
         })
 
-        // thiago.kienbaum1@hotmail.com
         const data = {
             id: response.data.user.id,
             name: response.data.user.name,
@@ -52,17 +58,45 @@ export default class Main extends Component {
         });
     }
 
+    signUpHandleSubmit = async event => {
+        event.preventDefault();
+
+        const { name, githubId, email, password, confirmPassword } = this.state.signUp;
+        const { user } = this.state;
+
+        const response = await api.post('/users', {
+            name,
+            github_id: githubId,
+            email,
+            password,
+            confirmPassword
+        })
+
+        const data = {
+            id: response.data.id,
+            name: response.data.name,
+            githubId: response.data.github_id,
+            email: response.data.email,
+            starredRepositories: response.data.starredRepositories,
+        }
+
+        this.setState({
+            user: [...user, data],
+        });
+    }
+
     render() {
-        const { signIn } = this.state;
+        const { signIn, signUp } = this.state;
 
         return (
             <Container>
-                <h1>
+                <Header>
                     <FaGithub />
                     GitHub Stars
-                </h1>
+                </Header>
 
                 <SignInForm onSubmit={this.signInHandleSubmit}>
+                    <h2>Sign In</h2>
                     <input
                         type="email"
                         placeholder="Email"
@@ -83,6 +117,54 @@ export default class Main extends Component {
                         Sign in
                     </SubmitButton>
                 </SignInForm>
+
+                <SignUpForm onSubmit={this.signUpHandleSubmit}>
+                    <h2>Sign Up</h2>
+                    <input
+                        type="text"
+                        placeholder="Name"
+                        form-name="signUp"
+                        form-field="name"
+                        value={signUp.name}
+                        onChange={this.handleInputChange}
+                    />
+                    <input
+                        type="text"
+                        placeholder="GitHub ID"
+                        form-name="signUp"
+                        form-field="githubId"
+                        value={signUp.githubId}
+                        onChange={this.handleInputChange}
+                    />
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        form-name="signUp"
+                        form-field="email"
+                        value={signUp.email}
+                        onChange={this.handleInputChange}
+                    />
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        form-name="signUp"
+                        form-field="password"
+                        value={signUp.password}
+                        onChange={this.handleInputChange}
+                    />
+                    <input
+                        type="password"
+                        placeholder="Confirm Password"
+                        form-name="signUp"
+                        form-field="confirmPassword"
+                        value={signUp.confirmPassword}
+                        onChange={this.handleInputChange}
+                    />
+                    <SubmitButton>
+                        Sign up for Github Stars
+                    </SubmitButton>
+                </SignUpForm>
+
             </Container>
       );
     }
