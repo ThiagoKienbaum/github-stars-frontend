@@ -1,9 +1,17 @@
 import React from 'react';
-
-// import { Container } from './styles';
+import { FaGithub } from 'react-icons/fa';
+import { Container } from './styles';
 
 function Main() {
-  return <h1>Main</h1>;
+  return (
+      <Container>
+          <h1>
+              <FaGithub />
+              GitHub Stars
+          </h1>
+
+      </Container>
+  );
 }
 
 export default Main;
