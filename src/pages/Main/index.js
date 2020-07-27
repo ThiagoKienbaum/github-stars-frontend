@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FaGithub } from 'react-icons/fa';
+import { FaGithub, FaSpinner } from 'react-icons/fa';
 import { Container, Header, SignInForm, SignUpForm, SubmitButton } from './styles';
 import api from '../../services/api';
 
@@ -11,14 +11,15 @@ export default class Main extends Component {
                 email: '',
                 password: '',
             },
-            user: [],
             signUp: {
                name: '' ,
                githubId: '',
                email: '',
                password: '',
                confirmPassword: '',
-            }
+            },
+            user: [],
+            loading: false,
         };
     }
 
@@ -36,6 +37,7 @@ export default class Main extends Component {
 
     signInHandleSubmit = async event => {
         event.preventDefault();
+        this.setState({ loading: true });
 
         const {email, password} = this.state.signIn;
         const { user } = this.state;
@@ -55,11 +57,13 @@ export default class Main extends Component {
 
         this.setState({
             user: [...user, data],
+            loading: false,
         });
     }
 
     signUpHandleSubmit = async event => {
         event.preventDefault();
+        this.setState({ loading: true });
 
         const { name, githubId, email, password, confirmPassword } = this.state.signUp;
         const { user } = this.state;
@@ -82,11 +86,12 @@ export default class Main extends Component {
 
         this.setState({
             user: [...user, data],
+            loading: false,
         });
     }
 
     render() {
-        const { signIn, signUp } = this.state;
+        const { signIn, signUp, loading } = this.state;
 
         return (
             <Container>
@@ -97,6 +102,7 @@ export default class Main extends Component {
 
                 <SignInForm onSubmit={this.signInHandleSubmit}>
                     <h2>Sign In</h2>
+
                     <input
                         type="email"
                         placeholder="Email"
@@ -113,13 +119,14 @@ export default class Main extends Component {
                         value={signIn.password}
                         onChange={this.handleInputChange}
                     />
-                    <SubmitButton>
-                        Sign in
+                    <SubmitButton loading={loading}>
+                        { loading ? <FaSpinner color="FFF" size={14} /> : 'Sign in' }
                     </SubmitButton>
                 </SignInForm>
 
                 <SignUpForm onSubmit={this.signUpHandleSubmit}>
                     <h2>Sign Up</h2>
+
                     <input
                         type="text"
                         placeholder="Name"
@@ -160,8 +167,8 @@ export default class Main extends Component {
                         value={signUp.confirmPassword}
                         onChange={this.handleInputChange}
                     />
-                    <SubmitButton>
-                        Sign up for Github Stars
+                    <SubmitButton loading={loading}>
+                        { loading ? <FaSpinner color="FFF" size={14} /> : 'Sign up for Github Stars' }
                     </SubmitButton>
                 </SignUpForm>
 
