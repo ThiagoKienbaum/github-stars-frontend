@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { FaGithub, FaSpinner } from 'react-icons/fa';
 import { Container, Header, SignInForm, SignUpForm, SubmitButton } from './styles';
 import api from '../../services/api';
 
-export default class Main extends Component {
+class Main extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -39,8 +40,8 @@ export default class Main extends Component {
         event.preventDefault();
         this.setState({ loading: true });
 
+        const { dispatch } = this.props;
         const {email, password} = this.state.signIn;
-        const { user } = this.state;
 
         const response = await api.post('/sessions', {
             email,
@@ -56,13 +57,20 @@ export default class Main extends Component {
         }
 
         this.setState({
-            user: [...user, data],
             loading: false,
         });
+
+        dispatch({
+            type: 'USER_LOGIN',
+            data,
+        })
+
+        this.props.history.push('/repository');
     }
 
     signUpHandleSubmit = async event => {
         event.preventDefault();
+
         this.setState({ loading: true });
 
         const { name, githubId, email, password, confirmPassword } = this.state.signUp;
@@ -177,4 +185,4 @@ export default class Main extends Component {
     }
 }
 
-
+export default connect()(Main);
