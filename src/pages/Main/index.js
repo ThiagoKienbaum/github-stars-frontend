@@ -19,8 +19,9 @@ class Main extends Component {
                password: '',
                confirmPassword: '',
             },
-            user: [],
             loading: false,
+            errorMessage: null,
+            login: false,
         };
     }
 
@@ -37,35 +38,38 @@ class Main extends Component {
     }
 
     signInHandleSubmit = async event => {
-        event.preventDefault();
         this.setState({ loading: true });
-
         const { dispatch } = this.props;
         const {email, password} = this.state.signIn;
+        const { login } = this.state;
 
-        const response = await api.post('/sessions', {
+        if (!login) event.preventDefault();
+
+        await api.post('/sessions', {
             email,
             password
+        }).then(response => {
+            const data = {
+                id: response.data.user.id,
+                name: response.data.user.name,
+                githubId: response.data.user.github_id,
+                email: response.data.user.email,
+                token: response.data.token,
+            }
+
+            this.setState({
+                loading: false,
+            });
+
+            dispatch({
+                type: 'USER_LOGIN',
+                data,
+            })
+
+            this.props.history.push('/repository');
+        }).catch(response => {
+            this.setState({errorMessage: response.message});
         })
-
-        const data = {
-            id: response.data.user.id,
-            name: response.data.user.name,
-            githubId: response.data.user.github_id,
-            email: response.data.user.email,
-            token: response.data.token,
-        }
-
-        this.setState({
-            loading: false,
-        });
-
-        dispatch({
-            type: 'USER_LOGIN',
-            data,
-        })
-
-        this.props.history.push('/repository');
     }
 
     signUpHandleSubmit = async event => {
@@ -74,32 +78,30 @@ class Main extends Component {
         this.setState({ loading: true });
 
         const { name, githubId, email, password, confirmPassword } = this.state.signUp;
-        const { user } = this.state;
 
-        const response = await api.post('/users', {
+        await api.post('/users', {
             name,
             github_id: githubId,
             email,
             password,
             confirmPassword
+        }).then(() => {
+            this.setState({
+                loading: false,
+                login: true,
+                signIn: {
+                    email,
+                    password,
+                }
+            });
+            this.signInHandleSubmit();
+        }).catch(response => {
+            this.setState({errorMessage: response.message});
         })
-
-        const data = {
-            id: response.data.id,
-            name: response.data.name,
-            githubId: response.data.github_id,
-            email: response.data.email,
-            starredRepositories: response.data.starredRepositories,
-        }
-
-        this.setState({
-            user: [...user, data],
-            loading: false,
-        });
     }
 
     render() {
-        const { signIn, signUp, loading } = this.state;
+        const { signIn, signUp, loading, errorMessage  } = this.state;
 
         return (
             <Container>
@@ -131,7 +133,7 @@ class Main extends Component {
                         { loading ? <FaSpinner color="FFF" size={14} /> : 'Sign in' }
                     </SubmitButton>
                 </SignInForm>
-
+                {errorMessage && <h3 className="error"> { errorMessage } </h3>}
                 <SignUpForm onSubmit={this.signUpHandleSubmit}>
                     <h2>Sign Up</h2>
 
@@ -179,7 +181,6 @@ class Main extends Component {
                         { loading ? <FaSpinner color="FFF" size={14} /> : 'Sign up for Github Stars' }
                     </SubmitButton>
                 </SignUpForm>
-
             </Container>
       );
     }
