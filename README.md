@@ -10,18 +10,37 @@
 ![GitHub forks](https://img.shields.io/github/forks/ThiagoKienbaum/github-stars-frontend?style=social)
 
 
-# github-stars-frontend
+# GitHub Stars Frontend
 
-> This project is app to add and manage tags on starred GitHub repositories.
+This project is a frontend web to add and manage tags on starred GitHub repositories.
+
+
+A live version can be seen [here](https://githubstars-frontend.herokuapp.com).
 
 ## Built with
 * JavaScript
 * React
-    - Babel
+    - Axios
+    - Babel    
+    - Styled Components
     - Webpack
-* Code quality
-    - EsLint
-    - Prettier
+* Redux
+* HTML
+* CSS
+
+## Development setup
+
+First, you need to setup the [API](https://github.com/ThiagoKienbaum/github-stars-backend).
+
+```
+git clone https://github.com/ThiagoKienbaum/github-stars-frontend.git 
+
+cd github-stars-frontend
+
+yarn
+
+yarn start 
+```
 
 ## Meta
 
