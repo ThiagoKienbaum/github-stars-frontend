@@ -29,14 +29,14 @@ export const Owner = styled.div`
 `;
 
 export const Repositories = styled.ul`
-    margin: 40px 0;
+    margin-top: 0px;
 
     li {
         display: flex;
         align-items: flex-start;
         background: #F9F9F9;
-        margin: 20px 0;
-        padding: 25px;
+        margin-bottom: 30px;
+        padding: 5px;
         border-radius: 7px;
         box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
         list-style: none;
@@ -50,7 +50,7 @@ export const Repositories = styled.ul`
 
         div {
             flex: 1;
-            margin-left: 15px;
+            margin-left: 10px;
 
             strong {
                 font-size: 20px;
@@ -64,28 +64,131 @@ export const Repositories = styled.ul`
                         transition: color 0.3s ease-in-out;
                     }
                 }
+            }
 
-                span {
-                    background: #7159c1;
-                    color: #FFF;
+            span {
+                margin-right: 5px;
+                background: #7159c1;
+                color: #FFF;
+                border-radius: 2px;
+                font-size: 12px;
+                font-weight: 600;
+                padding: 2px 13px;
+                box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+
+                form {
+                    margin-right: 5px;
+                    background: #FFF;
+                    color: #7159c1;
                     border-radius: 2px;
                     font-size: 12px;
                     font-weight: 600;
-                    height: 20px;
-                    padding: 3px 4px;
-                    margin: 2px;
-                }
-            }
+                    padding: 2px 13px;
+                    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 
-            p {
-                margin-top: 5px;
-                font-size: 12px;
-                color: #999;
+                    button {
+                        color: #FFF;
+                        background: #7159c1;
+                        border: none;
+                        max-height: 6%;
+                        max-width: 6%;
+                        padding: 1px;
+                        border-radius: 4px;
+                        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+
+                        &:hover {
+                            background: #644db0;
+                            transition: background-color 0.3s ease-in-out;
+                        }
+
+                        svg {
+                            margin-left: 0px
+                        }
+                    }
+                }
+
+                &:hover {
+                    background: #644db0;
+                    transition: background-color 0.3s ease-in-out;
+                }
+
+                svg {
+                    margin-left: 15px;
+                    color: #FFF;
+                    cursor: pointer;
+                }
             }
         }
     }
 `;
 
+export const AddForm = styled.form`
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+
+    input {
+        height: 30px;
+        min-width: 35%;
+        margin: 0 0 10px;
+        padding: 5px;
+        border-radius: 4px;
+        border: medium none;
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    }
+
+    button {
+        height: 30px;
+        min-width: 15%;
+        margin: 0 0 10px;
+        padding: 4px;
+        border-radius: 4px;
+        border: medium none;
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    }
+
+    p {
+        font-size: 12px;
+        color: #999;
+        margin-left: 100px;
+    }
+`;
+
+export const ShowForm = styled.form`
+    margin-top: 60px;
+    margin-bottom: 0px;
+    padding: 25px;
+
+    input {
+        border-radius: 14px;
+        min-width: 80%;
+        margin: 0 0 10px;
+        padding: 12px;
+        border: medium none;
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    }
+    button {
+        border-radius: 14px;
+        margin: 0 0 10px;
+        padding: 12px;
+        border: medium none;
+        min-width: 20%;
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    }
+`;
+
+export const SubmitButton = styled.button`
+    color: #FFF;
+    background: #7159c1;
+    border: none;
+    max-height: 100rem;
+    border-radius: 4px;
+
+    &:hover {
+        background: #644db0;
+        transition: background-color 0.3s ease-in-out;
+    }
+`;
 
 export const Loading = styled.div`
     color: #FFF;

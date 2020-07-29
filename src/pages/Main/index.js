@@ -19,18 +19,16 @@ class Main extends Component {
                password: '',
                confirmPassword: '',
             },
-            loading: false,
+            loading: 0,
             errorMessage: null,
-            login: false,
+            signUpLogin: false,
         };
     }
 
-    handleInputChange = event => {
+    handleInputChange = (event, formName, fieldName) => {
         const { value } = event.target;
-        const formName = event.target.getAttribute('form-name');
-        const formField = event.target.getAttribute('form-field');
         const currentState = { ...this.state[formName] };
-        currentState[formField] = value;
+        currentState[fieldName] = value;
 
         this.setState({
             [formName]: currentState
@@ -38,12 +36,12 @@ class Main extends Component {
     }
 
     signInHandleSubmit = async event => {
-        this.setState({ loading: true });
+        this.setState({ loading: 1 });
         const { dispatch } = this.props;
         const {email, password} = this.state.signIn;
-        const { login } = this.state;
+        const { signUpLogin } = this.state;
 
-        if (!login) event.preventDefault();
+        if (!signUpLogin) event.preventDefault();
 
         await api.post('/sessions', {
             email,
@@ -58,7 +56,7 @@ class Main extends Component {
             }
 
             this.setState({
-                loading: false,
+                loading: 0,
             });
 
             dispatch({
@@ -68,14 +66,16 @@ class Main extends Component {
 
             this.props.history.push('/repository');
         }).catch(response => {
-            this.setState({errorMessage: response.message});
+            this.setState({
+                errorMessage: response.message,
+                loading: 0,
+            });
         })
     }
 
     signUpHandleSubmit = async event => {
         event.preventDefault();
-
-        this.setState({ loading: true });
+        this.setState({ loading: 1 });
 
         const { name, githubId, email, password, confirmPassword } = this.state.signUp;
 
@@ -87,8 +87,8 @@ class Main extends Component {
             confirmPassword
         }).then(() => {
             this.setState({
-                loading: false,
-                login: true,
+                loading: 0,
+                signUpLogin: true,
                 signIn: {
                     email,
                     password,
@@ -96,7 +96,10 @@ class Main extends Component {
             });
             this.signInHandleSubmit();
         }).catch(response => {
-            this.setState({errorMessage: response.message});
+            this.setState({
+                errorMessage: response.message,
+                loading: 0,
+            });
         })
     }
 
@@ -116,69 +119,57 @@ class Main extends Component {
                     <input
                         type="email"
                         placeholder="Email"
-                        form-name="signIn"
-                        form-field="email"
                         value={signIn.email}
-                        onChange={this.handleInputChange}
+                        onChange={(event) => this.handleInputChange(event, 'signIn', 'email')}
                     />
                     <input
                         type="password"
                         placeholder="Password"
-                        form-name="signIn"
-                        form-field="password"
                         value={signIn.password}
-                        onChange={this.handleInputChange}
+                        onChange={(event) => this.handleInputChange(event, 'signIn', 'password')}
                     />
                     <SubmitButton loading={loading}>
-                        { loading ? <FaSpinner color="FFF" size={14} /> : 'Sign in' }
+                        { loading === 1 ? <FaSpinner color="FFF" size={14} /> : 'Sign in' }
                     </SubmitButton>
                 </SignInForm>
+
                 {errorMessage && <h3 className="error"> { errorMessage } </h3>}
+
                 <SignUpForm onSubmit={this.signUpHandleSubmit}>
                     <h2>Sign Up</h2>
 
                     <input
                         type="text"
                         placeholder="Name"
-                        form-name="signUp"
-                        form-field="name"
                         value={signUp.name}
-                        onChange={this.handleInputChange}
+                        onChange={(event) => this.handleInputChange(event, 'signUp', 'name')}
                     />
                     <input
                         type="text"
                         placeholder="GitHub ID"
-                        form-name="signUp"
-                        form-field="githubId"
                         value={signUp.githubId}
-                        onChange={this.handleInputChange}
+                        onChange={(event) => this.handleInputChange(event, 'signUp', 'githubId')}
                     />
                     <input
                         type="email"
                         placeholder="Email"
-                        form-name="signUp"
-                        form-field="email"
                         value={signUp.email}
-                        onChange={this.handleInputChange}
+                        onChange={(event) => this.handleInputChange(event, 'signUp', 'email')}
                     />
                     <input
                         type="password"
                         placeholder="Password"
-                        form-name="signUp"
-                        form-field="password"
                         value={signUp.password}
-                        onChange={this.handleInputChange}
+                        onChange={(event) => this.handleInputChange(event, 'signUp', 'password')}
                     />
                     <input
                         type="password"
                         placeholder="Confirm Password"
-                        form-name="signUp"
-                        form-field="confirmPassword"
                         value={signUp.confirmPassword}
-                        onChange={this.handleInputChange}
+                        onChange={(event) => this.handleInputChange(event, 'signUp', 'confirmPassword')}
                     />
                     <SubmitButton loading={loading}>
-                        { loading ? <FaSpinner color="FFF" size={14} /> : 'Sign up for Github Stars' }
+                        { loading === 1 ? <FaSpinner color="FFF" size={14} /> : 'Sign up for Github Stars' }
                     </SubmitButton>
                 </SignUpForm>
             </Container>
